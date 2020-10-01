@@ -276,7 +276,8 @@ class Transformer(Pipe):
         batch_id = TransformerListener.get_batch_id(docs)
         for listener in self.listeners[:-1]:
             listener.receive(batch_id, trf_full.doc_data, accumulate_gradient)
-        self.listeners[-1].receive(batch_id, trf_full.doc_data, backprop)
+        if self.listeners[:-1]:
+            self.listeners[-1].receive(batch_id, trf_full.doc_data, backprop)
         if set_annotations:
             self.set_annotations(docs, trf_full)
         return losses
